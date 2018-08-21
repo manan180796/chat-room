@@ -1,7 +1,12 @@
 #ifndef Channel_cpp
 #define Channel_cpp
 #include "Channel.hpp"
+#include <map>
 #define messageBlock 1024
+
+
+std::map<std::string, User*> User::users;
+std::map<std::string, ChatRoom*> ChatRoom::chatRooms;
 
 Channel::Channel(std::string serverAddress, int port)
     : serverAddress(serverAddress), port(port), sock(0) {
@@ -69,4 +74,23 @@ std::string Messenger::Read() {
     }
     return message;
 }
+
+void ChatRoom::AddUser(User* user) { users.push_back(user); }
+std::string ChatRoom::GetName() { return name; }
+void ChatRoom::SendAll(std::string message, std::string sender) {
+    for (int i = 0; i < users.size(); ++i) {
+        if (users[i]->GetName() != sender) {
+            users[i]->Send(sender + " replied \"" + message + "\"");
+        }
+    }
+}
+
+void ChatRoom::SetName(std::string name) { this->name = name; }
+
+User::User(int socket) : messenger(socket) {}
+std::string User::GetName() { return name; }
+void User::Send(std::string message) { messenger.Send(message); }
+void User::SetName(std::string name) { this->name = name; }
+std::string User::Get() { return messenger.Read(); }
+
 #endif
