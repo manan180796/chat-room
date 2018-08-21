@@ -9,8 +9,8 @@ using namespace std;
 
 
 int main(int argc, char const *argv[]) {
-    string serverAddress = std::string(argv[1]);
-    int port = std::atoi(argv[2]);
+    // string serverAddress = std::string(argv[1]);
+    // int port = std::atoi(argv[2]);
     int server_fd, new_socket, valread;
     struct sockaddr_in address;
     int opt = 1;
@@ -31,7 +31,7 @@ int main(int argc, char const *argv[]) {
     }
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = htons(port);
+    address.sin_port = htons(PORT);
 
     // Forcefully attaching socket to the port 8080
     if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
