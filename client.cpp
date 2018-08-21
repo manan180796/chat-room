@@ -13,10 +13,10 @@ int main(int argc, char const *argv[]) {
     Messenger m(c);
 
     while (true) {
-        cin.ignore();
         getline(cin, hello);
+        cin.ignore();
         m.Send(hello);
-        cout << "Server:" << m.Read() << endl;
+        cout << "Server:  " << m.Read() << endl;
     }
     return 0;
 }
