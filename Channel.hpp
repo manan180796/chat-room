@@ -9,6 +9,8 @@
 #include <unistd.h>
 
 class Channel {
+    std::string connectionMessage;
+
   public:
     std::string serverAddress;
     int port;
@@ -34,4 +36,9 @@ class Messenger {
     std::string Read();
     ~Messenger();
 };
+
+
+class Client {};
+
+class ChatRoom {};
 #endif

@@ -6,11 +6,8 @@ using namespace std;
 
 
 int main(int argc, char const *argv[]) {
-    string serverAddress = "127.0.0.1";
-    int port = 8080;
-    struct sockaddr_in address;
-    int sock = 0, valread;
-    struct sockaddr_in serv_addr;
+    string serverAddress = std::string(argv[1]);
+    int port = std::atoi(argv[2]);
     string hello = "Hello from client123456789012345678901234567890";
     Channel c(serverAddress, port);
     Messenger m(c);

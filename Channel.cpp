@@ -7,7 +7,7 @@
 Channel::Channel(std::string serverAddress, int port)
     : serverAddress(serverAddress), port(port), sock(0) {
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-        // cout << "\n Socket creation error \n";
+        connectionMessage = "Socket creation error";
         return;
     }
     // memset(&serv_addr, '0', sizeof(serv_addr));
@@ -17,12 +17,12 @@ Channel::Channel(std::string serverAddress, int port)
 
     // Convert IPv4 and IPv6 addresses from text to binary form
     if (inet_pton(AF_INET, serverAddress.c_str(), &serv_addr.sin_addr) <= 0) {
-        // cout << "\nInvalid address/ Address not supported \n";
+        connectionMessage = "Invalid address / Address not supported";
         return;
     }
 
     if (connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0) {
-        // cout << "\nConnection Failed \n";
+        connectionMessage = "Connection Failed";
         return;
     }
 }
