@@ -1,6 +1,7 @@
 #ifndef Channel_cpp
 #define Channel_cpp
 #include "Channel.hpp"
+#include <iostream>
 #include <map>
 #define messageBlock 1024
 
@@ -75,7 +76,10 @@ std::string Messenger::Read() {
     return message;
 }
 
-void ChatRoom::AddUser(User* user) { users.push_back(user); }
+void ChatRoom::AddUser(User* user) {
+    users.push_back(user);
+    std::cout << "sent to" << user->GetName();
+}
 std::string ChatRoom::GetName() { return name; }
 void ChatRoom::SendAll(std::string message, std::string sender) {
     for (int i = 0; i < users.size(); ++i) {
