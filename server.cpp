@@ -50,8 +50,10 @@ int main(int argc, char const *argv[]) {
 
     Messenger m(new_socket);
 
-    cout << m.Read() << endl;
-    m.Send(hello);
-    printf("Hello message sent\n");
+    while (true) {
+        cout << m.Read() << endl;
+        cin >> hello;
+        m.Send(hello);
+    }
     return 0;
 }

@@ -1,7 +1,6 @@
 #ifndef Channel_cpp
 #define Channel_cpp
 #include "Channel.hpp"
-
 #define messageBlock 1024
 
 Channel::Channel(std::string serverAddress, int port)

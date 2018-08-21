@@ -11,8 +11,11 @@ int main(int argc, char const *argv[]) {
     string hello = "Hello from client123456789012345678901234567890";
     Channel c(serverAddress, port);
     Messenger m(c);
-    m.Send(hello);
-    cout << "Hello message sent\n";
-    cout << m.Read();
+
+    while (true) {
+        cin >> hello;
+        m.Send(hello);
+        cout << m.Read() << endl;
+    }
     return 0;
 }

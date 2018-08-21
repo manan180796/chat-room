@@ -1,6 +1,7 @@
 #ifndef Channel_hpp
 #define Channel_hpp
 #include <string>
+#include <vector>
 
 
 #include <arpa/inet.h>
@@ -38,7 +39,13 @@ class Messenger {
 };
 
 
-class Client {};
+class Client {
+    Messenger messenger;
+    std::string name;
+};
 
-class ChatRoom {};
+class ChatRoom {
+    std::vector<Client> clients;
+    std::string name;
+};
 #endif
