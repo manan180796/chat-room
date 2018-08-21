@@ -53,7 +53,6 @@ int main(int argc, char const *argv[]) {
     while (true) {
         cout << "Client:  " << m.Read() << endl;
         getline(cin, hello);
-        cin.ignore();
         m.Send(hello);
     }
     return 0;

@@ -14,7 +14,6 @@ int main(int argc, char const *argv[]) {
 
     while (true) {
         getline(cin, hello);
-        cin.ignore();
         m.Send(hello);
         cout << "Server:  " << m.Read() << endl;
     }
