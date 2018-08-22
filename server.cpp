@@ -9,27 +9,67 @@
 using namespace std;
 #define PORT 8080
 
+vector<string> breaker(string statement) {
+    char delimiter = ' ';
+    vector<string> l;
+    l.push_back("");
+    for (int i = 0; i < statement.length(); ++i) {
+        if (statement[i] == ' ')
+            l.push_back("");
+        else {
+            l[l.size() - 1] += statement[i];
+        }
+    }
+    return l;
+}
 
 void *client(void *sock) {
     int socket = *((int *)sock);
     User *user = new User(socket);
     user->Send("Please Enter Your Username");
     user->SetName(user->Get());
+    ChatRoom *cr = nullptr;
     User::users[user->GetName()] = user;
     while (true) {
-        user->Send("Here is a list of all the chatrooms");
-        for (const auto &cr : ChatRoom::chatRooms) {
-            user->Send(cr.first);
+        while (cr == nullptr) {
+            string response = user->Get();
+            vector<string> l = breaker(response);
+            if (response == "list chatrooms") {
+                string message = "Here is a list of all the chatrooms\n";
+                for (const auto &cr : ChatRoom::chatRooms) {
+                    message += cr.first;
+                }
+                user->Send(message);
+            } else if (l.size() == 3 && (l[0] == "create") &&
+                       l[1] == "chatroom") {
+                cr = new ChatRoom(l[2]);
+                cr->AddUser(user);
+                ChatRoom::chatRooms[l[2]] = cr;
+            } else if (l.size() == 2 && l[0] == "join") {
+                cr = ChatRoom::chatRooms[l[1]];
+                cr->AddUser(user);
+            } else if (l.size() == 1 && l[0] == "exit") {
+                break;
+
+            } else {
+                user->Send("wrong input");
+            }
         }
-        user->Send("Please Enter The chatroom you wish to enter");
-        std::string answer = user->Get();
-        ChatRoom *cr = ChatRoom::chatRooms[answer];
-        cr->AddUser(user);
-        while (true) {
-            std::string query = user->Get();
-            cr->SendAll(query, user->GetName());
+        if (cr == nullptr) break;
+        while (cr != nullptr) {
+            string response = user->Get();
+            vector<string> l = breaker(response);
+            if (l.size() == 1 && l[0] == "leave") {
+                cr->RemoveUser(user);
+                cr = nullptr;
+            } else if (l.size() == 2 && l[0] == "reply") {
+                cr->SendAll(l[1], user->GetName());
+            } else {
+                user->Send("wrong input");
+            }
         }
     }
+    delete user;
 }
 
 int main(int argc, char const *argv[]) {
@@ -64,7 +104,6 @@ int main(int argc, char const *argv[]) {
         perror("bind failed");
         exit(EXIT_FAILURE);
     }
-    ChatRoom::chatRooms["hello"] = new ChatRoom();
     while (true) {
         if (count >= limit) continue;
         if (listen(server_fd, 3) < 0) {

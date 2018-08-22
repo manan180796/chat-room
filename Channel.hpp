@@ -57,8 +57,10 @@ class ChatRoom {
     std::string name;
 
   public:
+    ChatRoom(std::string name);
     static std::map<std::string, ChatRoom*> chatRooms;
     void AddUser(User* user);
+    void RemoveUser(User* user);
     std::string GetName();
     void SetName(std::string name);
     void SendAll(std::string message, std::string sender);
